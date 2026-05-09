@@ -1,0 +1,26 @@
+services:
+  # The FastAPI Logic
+  backend:
+    build: .
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    volumes:
+      - .:/app
+    depends_on:
+      - neo4j
+
+  # Local Graph Database (for development)
+  neo4j:
+    image: neo4j:5.12
+    ports:
+      - "7474:7474" # HTTP UI
+      - "7687:7687" # Bolt protocol (for code)
+    environment:
+      - NEO4J_AUTH=neo4j/password123
+    volumes:
+      - neo4j_data:/data
+
+volumes:
+  neo4j_data:
